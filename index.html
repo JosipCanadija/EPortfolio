@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>E-portfolio — Luka Jovanović & Josip Čanađija</title>
+
+  <!-- D3.js -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* --- Osnovni stilovi --- */
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --accent:#5eead4;
+      --muted:#94a3b8;
+      --accent-2:#7c3aed;
+      --glass: rgba(255,255,255,0.03);
+      --maxwidth:1100px;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef8;background:linear-gradient(180deg,#071023 0%, #07182a 60%);-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}
+    .container{max-width:var(--maxwidth);margin:0 auto;padding:24px;}
+
+    /* --- Header/nav --- */
+    header{background:transparent;position:sticky;top:0;z-index:50;padding:10px 0;backdrop-filter: blur(6px)}
+    .navrow{display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:42px;height:42px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#021018;font-weight:700}
+    nav{display:flex;gap:18px;align-items:center}
+    nav a{color:#dff7f0;padding:8px 12px;border-radius:8px;font-weight:600;font-size:14px}
+    .cta{background:var(--accent);color:#022; padding:8px 12px;border-radius:8px;font-weight:700}
+
+    /* --- Mobile nav --- */
+    .hamburger{display:none;gap:6px;flex-direction:column;cursor:pointer}
+    .hamburger span{width:22px;height:2px;background:#dff7f0;border-radius:2px}
+
+    /* --- Default --- */
+    nav {
+    display: flex;
+    }
+
+    .hamburger {
+    display: none;
+    }
+
+    .mobilemenu {
+    display: none;
+    }
+
+    /* --- Mobile --- */
+    @media (max-width: 800px) {
+        nav {
+            display: none;
+        }
+        .hamburger {
+            display: flex;
+        }
+        .mobilemenu {
+            display: none; /* prikazuje se JS-om */
+        }
+    }
+
+
+
+    /* --- Hero --- */
+    .hero{display:flex;gap:24px;align-items:center;padding:48px 0}
+    .hero-left{flex:1}
+    .hero-right{flex:1;display:flex;align-items:center;justify-content:center}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);}
+
+    h1{margin:6px 0 6px 0;font-size:32px}
+    p.lead{color:var(--muted);margin:0 0 12px 0}
+
+    /* --- O nama / Projekti / Vještine --- */
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .person{display:flex;gap:12px;align-items:flex-start}
+    .avatar{width:356px;height:86px;border-radius:12px;background:linear-gradient(135deg,var(--accent-2),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:28px}
+    .meta h3{margin:0 0 6px 0}
+    .meta p{color:var(--muted);margin:0}
+
+    /* --- Projekt lista --- */
+    .projects{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:900px){.projects{grid-template-columns:repeat(1,1fr)}}
+    .project{padding:12px;border-radius:10px;background:var(--glass);cursor:pointer;border:1px solid rgba(255,255,255,0.03)}
+    .project h4{margin:0 0 8px 0}
+    .filters{display:flex;gap:8px;margin-bottom:12px}
+
+    /* --- Vještine (D3 container) --- */
+    #skillsCard{padding:16px}
+    .controls{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+    .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:6px 10px;border-radius:8px;color:#dff7f0;cursor:pointer}
+    .btn.active{background:rgba(255,255,255,0.03);border-color:var(--accent)}
+    .tooltip{position:absolute;padding:8px 10px;background:#021019;color:#dff7f0;border-radius:6px;border:1px solid rgba(255,255,255,0.04);pointer-events:none;font-size:13px;z-index:1000}
+
+    /* --- Footer --- */
+    footer{margin-top:36px;padding:18px 0;color:var(--muted);font-size:14px;text-align:center}
+
+    .muted{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header class="container">
+    <div class="navrow">
+      <div class="brand">
+        <div class="logo">TIW</div>
+        <div>
+          <div style="font-weight:700">E-portfolio</div>
+          <div class="muted" style="font-size:13px">Luka Jovanović & Josip Čanađija</div>
+        </div>
+      </div>
+
+      <nav>
+        <a href="#home">Početna</a>
+        <a href="#about">O nama</a>
+        <a href="#projects">Projekti</a>
+        <a href="#skills">Vještine</a>
+        <a href="#contact" class="cta">Kontakt</a>
+      </nav>
+
+      <div class="hamburger" id="hambtn" title="Meni">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="mobilemenu card" id="mobilemenu" aria-hidden="true">
+        <a href="#home">Početna</a>
+        <a href="#about">O nama</a>
+        <a href="#projects">Projekti</a>
+        <a href="#skills">Vještine</a>
+        <a href="#contact">Kontakt</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="hero-left">
+        <div class="card">
+          <h1>Dobrodošli na e-portfolio od Luke Jovanovića & Josipa Čanađije</h1>
+          <p class="lead">Zajednički e-portfolio i 1. Projektni zadatak za predmet <strong>Tehnologije Interaktivnog Weba</strong> </p>
+            <p class="lead">Ovdje možete vidjeti naše profile, projekte i vještine. Stranica je interaktivna i koristi <strong>D3.js</strong> za vizualizaciju našeg skill level-a i chatbot izrađen pomoću <strong>BLA</strong></p>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <a class="btn" href="#projects">Pogledaj naše projekte</a>
+            <a class="btn" href="#skills">Pogledaj naše vještine</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="card" style="width:320px;text-align:center">
+          <h3>Brzi podaci tima</h3>
+          <p class="muted">Dvoje studenta - sa strašću za game design</p>
+          <div style="display:flex;gap:10px;margin-top:12px;justify-content:center">
+            <div style="text-align:center">
+              <div style="font-weight:700;font-size:20px">2</div>
+              <div class="muted">Člana</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-weight:700;font-size:20px">5</div>
+              <div class="muted">Projekta</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- O NAMA -->
+    <section id="about" style="margin-top:10px">
+      <h2>O nama</h2>
+      <div class="grid">
+        <div class="card person">
+          <div class="avatar">LJ</div>
+          <div class="meta">
+            <h3>Luka Jovanović</h3>
+            <p class="muted">Iskustvo: Game dizajn / 3D dizajn</p>
+            <p class="muted" style="margin-top:8px">Kratak opis: Student iz Istre zaljubljen u 3D printanje i 3D modeliranje. Iskusan u modeliranju funkcionalnih modela u SolidWorks-u i Blender-u koji se koriste u stvarnom svijetu. Također iskusan u 2D i 3D game dizajnu. </p>
+          </div>
+        </div>
+
+        <div class="card person">
+          <div class="avatar">JČ</div>
+          <div class="meta">
+            <h3>Josip Čanađija</h3>
+            <p class="muted">Iskustvo: Backend / Chatbot integracija</p>
+            <p class="muted" style="margin-top:8px">Kratak opis: student/ica, odgovoran/na za backend logiku i integraciju chatbota (ostatak tima radi chatbot).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJEKTI -->
+    <section id="projects" style="margin-top:18px">
+      <h2>Projekti</h2>
+      <div class="card">
+        <div class="filters">
+          <button class="btn active" data-filter="all">Svi</button>
+          <button class="btn" data-filter="web">Web</button>
+          <button class="btn" data-filter="game">Igra</button>
+          <button class="btn" data-filter="mobile">Mobile</button>
+          <button class="btn" data-filter="seminar">Seminar</button>
+          <button class="btn" data-filter="luka">Lukini projekti</button>
+          <button class="btn" data-filter="josip">Josipovi projekti</button>
+        </div>
+
+        <div id="projectsList" class="projects">
+          <!-- Projekti se generiraju sa javascriptom -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VJEŠTINE (D3 graf) -->
+    <section id="skills" style="margin-top:18px">
+      <h2>Vještine</h2>
+      <div id="skillsCard" class="card">
+        <div class="controls">
+          <button class="btn active" id="sortBtn">Sortiraj po razini</button>
+          <button class="btn" id="toggleBtn">Prebaci prikaz (grupe)</button>
+          <div style="margin-left:auto;color:var(--muted);font-size:13px">Klik na legendu za uključivanje/isključivanje člana</div>
+        </div>
+
+        <div id="chartWrap" style="position:relative">
+          <svg id="skillsSvg" width="100%" height="360"></svg>
+          <div id="legend" style="margin-top:8px;display:flex;gap:12px;flex-wrap:wrap"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kontakt i chatbot placeholder -->
+    <section id="contact" style="margin-top:18px">
+      <h2>Kontakt</h2>
+      <div class="card" style="display:flex;flex-direction:column;gap:10px">
+        <p class="muted">E-mail od Luke: <a href="luka.jovanovic1@uniri.hr">luka.jovanovic1@uniri.hr</a></p>
+        <p class="muted">E-mail od Josipa: <a href="josip.canadija@uniri.hr">josip.canadija@uniri.hr</a></p>
+        <p class="muted">Chatbot: (ovdje će kolega ubaciti chatbot komponentu — npr. iframe ili JS widget)</p>
+        <div style="display:flex;gap:8px">
+          <a class="btn" href="https://github.com/" target="_blank">GitHub</a>
+          <a class="btn" href="https://hr.linkedin.com/" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="muted">© <span id="year"></span> Luka Jovanović & Josip Čanađija — 1. Projektni zadatak</div>
+    </footer>
+  </main>
+
+  <!-- Tooltip -->
+  <div id="tooltip" class="tooltip" style="display:none"></div>
+
+  <script>
+  /* Podaci u grafu */
+  const team = [
+    {
+      id: "Luka",
+      name: "Luka Jovanović",
+      initials: "I1",
+      color: "#5eead4",
+      skills: {
+        "HTML/CSS": 75,
+        "JavaScript": 36,
+        "D3.js": 28,
+        "React": 50,
+        "Unity": 91,
+        "Blender": 80
+      }
+    },
+    {
+      id: "Josip",
+      name: "Josip Čanađija",
+      initials: "I2",
+      color: "#7c3aed",
+      skills: {
+        "HTML/CSS": 70,
+        "JavaScript": 60,
+        "D3.js": 40,
+        "React": 50,
+        "Unity": 78,
+        "Blender": 70
+      }
+    }
+  ];
+
+  const projectsData = [
+    {id:1,title:"Light Rush (prototip)",tags:["game","luka"],short:"Proceduralni 3D infinite runner sa promjenama u terenu."},
+    {id:2,title:"MuscleBuddy app",tags:["mobile","luka","josip"],short:"Aplikacija za povezivanje korisnika s teretanama i trenerima."},
+    {id:3,title:"Porto Bussola kampanja",tags:["web","luka"],short:"Marketing kampanja i stranica za turističku agenciju iz Poreča."},
+    {id:4,title:"Projekt iz kolegija: Upravljanje dig. transformacijom",tags:["seminar","luka"],short:"Analiza digitalne transformacije za Trio I d.o.o."},
+    {id:5,title:"Knight of Swords (prototip)",tags:["game","luka"],short:"Survivor-like 2D side scroller sa jedinstvenom načinom napadanja."},
+  ];
+
+  /* Navbar mobile */
+  const hambtn = document.getElementById('hambtn');
+  const mobilemenu = document.getElementById('mobilemenu');
+  hambtn.addEventListener('click', () => {
+    const vis = mobilemenu.style.display === 'block';
+    mobilemenu.style.display = vis ? 'none' : 'block';
+    mobilemenu.setAttribute('aria-hidden', vis ? 'true' : 'false');
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', e=>{
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+      // Zatvori mobile menu
+      if(window.innerWidth < 800) { mobilemenu.style.display='none'; mobilemenu.setAttribute('aria-hidden','true')}
+    })
+  });
+
+  // footer
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const projectsList = document.getElementById('projectsList');
+
+  function renderProjects(filter = 'all') {
+    projectsList.innerHTML = '';
+    const filtered = projectsData.filter(p => filter === 'all' ? true : p.tags.includes(filter));
+    filtered.forEach(p=>{
+      const el = document.createElement('div');
+      el.className = 'project';
+      el.innerHTML = `<h4>${p.title}</h4><p class="muted">${p.short}</p><div style="margin-top:8px"><small class="muted">Tags: ${p.tags.join(', ')}</small></div>`;
+      el.addEventListener('click', ()=> {
+        alert(p.title + "\\n\\n" + p.short + "\\n\\nTags: " + p.tags.join(', '));
+      });
+      projectsList.appendChild(el);
+    });
+  }
+  renderProjects();
+
+  // filter buttons
+  document.querySelectorAll('[data-filter]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProjects(btn.getAttribute('data-filter'));
+    });
+  });
+
+  /* D3 Graf */
+
+  const skillSet = Array.from(new Set([].concat(...team.map(t=>Object.keys(t.skills)))));
+
+  let chartData = skillSet.map(skill => {
+    const row = { skill };
+    team.forEach(t => row[t.id] = t.skills[skill] || 0 );
+    return row;
+  });
+
+  const svg = d3.select('#skillsSvg');
+  const wrap = document.getElementById('chartWrap');
+  let width = wrap.clientWidth;
+  let height = 360;
+  svg.attr('viewBox', `0 0 ${width} ${height}`);
+
+  const margin = {top:20, right:20, bottom:40, left:120};
+  const innerWidth = () => Math.max(300, width - margin.left - margin.right);
+  const innerHeight = () => Math.max(120, height - margin.top - margin.bottom);
+
+  let activeMembers = new Set(team.map(t=>t.id));
+  let sortedByLevel = false;
+  let grouped = true;
+
+  // tooltip
+  const tooltip = d3.select('#tooltip');
+
+  function draw() {
+    width = wrap.clientWidth;
+    svg.attr('viewBox', `0 0 ${width} ${height}`);
+    svg.selectAll('*').remove();
+    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const iw = innerWidth();
+    const ih = innerHeight();
+
+    const members = team.filter(t => activeMembers.has(t.id));
+    const memberIds = members.map(m => m.id);
+
+    const maxVal = d3.max(chartData, d => {
+      if (grouped) {
+        return d3.max(memberIds.map(id => d[id] || 0));
+      } else {
+
+        return d3.sum(memberIds.map(id => d[id] || 0));
+      }
+    }) || 100;
+
+    const x = d3.scaleLinear().domain([0, Math.max(100, maxVal)]).range([0, iw]).nice();
+    const y = d3.scaleBand().domain(chartData.map(d => d.skill)).range([0, ih]).padding(0.2);
+
+    g.append('g').call(d3.axisLeft(y).tickSize(0)).selectAll('text').attr('fill','#dff7f0');
+    g.append('g').attr('transform', `translate(0,${ih})`).call(d3.axisBottom(x).ticks(5)).selectAll('text').attr('fill','#dff7f0');
+
+    if (grouped) {
+      const subBand = d3.scaleBand().domain(memberIds).range([0, y.bandwidth()]).padding(0.12);
+      const rows = g.selectAll('.row').data(chartData).join('g').attr('transform', d=>`translate(0,${y(d.skill)})`);
+      rows.each(function(dRow){
+        const rowg = d3.select(this);
+        rowg.selectAll('rect')
+          .data(memberIds.map(id => ({id, value: dRow[id] || 0, skill: dRow.skill})))
+          .join('rect')
+          .attr('x', 0)
+          .attr('y', dd => subBand(dd.id))
+          .attr('height', subBand.bandwidth())
+          .attr('width', 0)
+          .attr('fill', dd => team.find(t=>t.id===dd.id).color)
+          .on('mousemove', (event, dd)=>{
+            tooltip.style('display','block').style('left', (event.pageX+12)+'px').style('top', (event.pageY+12)+'px')
+              .html(`<strong>${team.find(t=>t.id===dd.id).name}</strong><br>${dd.skill}: ${dd.value}`);
+          })
+          .on('mouseleave', ()=>{
+            tooltip.style('display','none');
+          })
+          .transition().duration(700)
+          .attr('width', dd => x(dd.value));
+      });
+    } else {
+      const stackGen = d3.stack().keys(memberIds);
+      const stacked = stackGen(chartData.map(d => {
+        const obj = { skill: d.skill };
+        memberIds.forEach(id => obj[id] = d[id] || 0);
+        return obj;
+      }));
+      const rows = g.selectAll('.row').data(stacked).join('g');
+      rows.attr('fill', (s,i) => team.find(t=>t.id===memberIds[i]).color);
+      rows.selectAll('rect')
+        .data(d => d.map(dd => ({skill: dd.data.skill, x0: dd[0], x1: dd[1], member: d.key})))
+        .join('rect')
+        .attr('y', d => y(d.skill))
+        .attr('height', y.bandwidth())
+        .attr('x', d => x(d.x0))
+        .attr('width', 0)
+        .on('mousemove', (event,d)=>{
+          tooltip.style('display','block').style('left', (event.pageX+12)+'px').style('top', (event.pageY+12)+'px')
+            .html(`<strong>${team.find(t=>t.id===d.member).name}</strong><br>${d.skill}: ${d.x1 - d.x0}`);
+        })
+        .on('mouseleave', ()=> tooltip.style('display','none'))
+        .transition().duration(700)
+        .attr('width', d => x(d.x1) - x(d.x0));
+    }
+
+    const legendWrap = d3.select('#legend');
+    legendWrap.html('');
+    team.forEach(t => {
+      const active = activeMembers.has(t.id);
+      const item = document.createElement('div');
+      item.style.display = 'flex';
+      item.style.alignItems = 'center';
+      item.style.gap = '8px';
+      item.style.cursor = 'pointer';
+      item.title = t.name;
+      item.innerHTML = `<div style="width:14px;height:14px;border-radius:3px;background:${t.color};opacity:${active?1:0.25};border:1px solid rgba(255,255,255,0.06)"></div><div style="font-size:13px;color:${active? '#dff7f0': 'rgba(223,247,240,0.5)'}">${t.name}</div>`;
+      item.addEventListener('click', ()=>{
+        if(activeMembers.has(t.id)) activeMembers.delete(t.id); else activeMembers.add(t.id);
+        if(activeMembers.size===0){
+          activeMembers.add(t.id);
+        }
+        draw();
+      });
+      legendWrap.node().appendChild(item);
+    });
+
+    svg.append('text').attr('x', margin.left).attr('y', 14).attr('fill', '#dff7f0').attr('font-size',12).text('Vrijednosti od 0 do 100');
+  }
+
+  draw();
+
+  let to;
+  window.addEventListener('resize', ()=> { clearTimeout(to); to = setTimeout(draw, 120) });
+
+  document.getElementById('sortBtn').addEventListener('click', function(){
+    sortedByLevel = !sortedByLevel;
+    this.classList.toggle('active', sortedByLevel);
+    if(sortedByLevel){
+      const activeIds = Array.from(activeMembers);
+      chartData.sort((a,b)=> {
+        const sa = activeIds.reduce((s,id)=>s + (a[id]||0),0);
+        const sb = activeIds.reduce((s,id)=>s + (b[id]||0),0);
+        return sb - sa;
+      });
+    }else{
+      chartData.sort((a,b)=> skillSet.indexOf(a.skill) - skillSet.indexOf(b.skill));
+    }
+    draw();
+  });
+
+  document.getElementById('toggleBtn').addEventListener('click', function(){
+    grouped = !grouped;
+    this.classList.toggle('active', !grouped);
+    draw();
+  });
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'g'){ grouped = !grouped; draw(); }
+    if(e.key === 's'){ sortedByLevel = !sortedByLevel; document.getElementById('sortBtn').classList.toggle('active', sortedByLevel); draw(); }
+  });
+
+  </script>
+</body>
+</html>
