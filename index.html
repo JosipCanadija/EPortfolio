@@ -49,20 +49,87 @@
     display: none;
     }
 
-    .mobilemenu {
-    display: none;
+    @media (min-width: 801px) {
+        .mobilemenu {
+            display: none;
+        }
     }
 
+
     /* --- Mobile --- */
+    @media (max-width: 600px) {
+        .container {
+            max-width: 100%;
+            padding: 12px;
+        }
+
+        .hero {
+            flex-direction: column;
+        }
+
+        .hero-left, .hero-right {
+            width: 100%;
+        }
+
+        .card {
+            width: 100%;
+        }
+
+        .projects {
+            grid-template-columns: 1fr !important;
+        }
+
+        #skillsCard {
+            width: 100%;
+            padding: 12px;
+        }
+    }
+
+    /* Mobilni prikaz navigacije */
     @media (max-width: 800px) {
+
         nav {
             display: none;
         }
+
         .hamburger {
             display: flex;
+            padding: 6px;
+            cursor: pointer;
+            z-index: 2000;
         }
+
+        /* Mobilni meni */
         .mobilemenu {
-            display: none; /* prikazuje se JS-om */
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            width: calc(100% - 40px);
+            background: #0b1220 !important;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 12px;
+            border-radius: 12px;
+            display: none;
+            flex-direction: column;
+            z-index: 2001;
+        }
+
+        .mobilemenu a {
+            padding: 10px 0;
+            display: block;
+            color: #dff7f0;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .mobilemenu a:not(:last-child) {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+    }
+
+    @media (max-width: 800px) {
+        .mobilemenu {
+            display: none; /* bit će togglan JS-om */
         }
     }
 
@@ -103,6 +170,52 @@
     footer{margin-top:36px;padding:18px 0;color:var(--muted);font-size:14px;text-align:center}
 
     .muted{color:var(--muted)}
+
+    /* --- Kontakt --- */
+    .contact-wrapper {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+        padding: 20px;
+    }
+
+    /* Stil za pojedinu osobu */
+    .contact-person {
+        flex: 1;
+        padding: 10px 0;
+    }
+
+    .contact-person h3 {
+        margin: 0 0 8px;
+    }
+
+    .contact-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    /* Mobilni prikaz — jedan ispod drugog */
+    @media (max-width: 700px) {
+        .contact-wrapper {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .contact-person {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 18px;
+            margin-bottom: 18px;
+        }
+
+        .contact-person:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    }
+
+
   </style>
 </head>
 <body>
@@ -230,18 +343,40 @@
       </div>
     </section>
 
-    <!-- Kontakt i chatbot placeholder -->
+    <!-- Kontakt -->
     <section id="contact" style="margin-top:18px">
       <h2>Kontakt</h2>
-      <div class="card" style="display:flex;flex-direction:column;gap:10px">
-        <p class="muted">E-mail od Luke: <a href="luka.jovanovic1@uniri.hr">luka.jovanovic1@uniri.hr</a></p>
-        <p class="muted">E-mail od Josipa: <a href="josip.canadija@uniri.hr">josip.canadija@uniri.hr</a></p>
-        <div style="display:flex;gap:8px">
-          <a class="btn" href="https://github.com/" target="_blank">GitHub</a>
-          <a class="btn" href="https://hr.linkedin.com/" target="_blank">LinkedIn</a>
+
+      <div class="card contact-wrapper">
+
+        <!-- Luka -->
+        <div class="contact-person">
+          <h3>Luka Jovanović</h3>
+          <p><strong>E-mail:</strong> <a href="mailto:luka.jovanovic1@uniri.hr">luka.jovanovic1@uniri.hr</a></p>
+          <p><strong>Telefon:</strong> <a href="tel:+385912345678">+385 91 234 5678</a></p>
+
+          <div class="contact-buttons">
+            <a class="btn" href="https://github.com/" target="_blank">GitHub</a>
+            <a class="btn" href="https://hr.linkedin.com/" target="_blank">LinkedIn</a>
+          </div>
         </div>
+
+        <!-- Josip -->
+        <div class="contact-person">
+          <h3>Josip Čanađija</h3>
+          <p><strong>E-mail:</strong> <a href="mailto:josip.canadija@uniri.hr">josip.canadija@uniri.hr</a></p>
+          <p><strong>Telefon:</strong> <a href="tel:+385 987654321">+385 98 765 4321</a></p>
+
+          <div class="contact-buttons">
+            <a class="btn" href="https://github.com/" target="_blank">GitHub</a>
+            <a class="btn" href="https://hr.linkedin.com/" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+
       </div>
     </section>
+
+
 
     <footer>
       <div class="muted">© <span id="year"></span> Luka Jovanović & Josip Čanađija — 1. Projektni zadatak</div>
@@ -503,7 +638,7 @@
   });
 
   </script>
-  <!-- Start of ChatBot (www.chatbot.com) code -->
+  <!-- ChatBot (www.chatbot.com) -->
 <script>
   window.__ow = window.__ow || {};
   window.__ow.organizationId = "b9cb08aa-5337-40d4-8dad-bbff77c3c2c8";
@@ -513,7 +648,7 @@
   ;(function(n,t,c){function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},get:function(){if(!e._h)throw new Error("[OpenWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},call:function(){i(["call",c.call(arguments)])},init:function(){var n=t.createElement("script");n.async=!0,n.type="text/javascript",n.src="https://cdn.openwidget.com/openwidget.js",t.head.appendChild(n)}};!n.__ow.asyncInit&&e.init(),n.OpenWidget=n.OpenWidget||e}(window,document,[].slice))
 </script>
 <noscript>You need to <a href="https://www.chatbot.com/help/chat-widget/enable-javascript-in-your-browser/" rel="noopener nofollow">enable JavaScript</a> in order to use the AI chatbot tool powered by <a href="https://www.chatbot.com/" rel="noopener nofollow" target="_blank">ChatBot</a></noscript>
-<!-- End of ChatBot code -->
+
 </body>
 </html>
 
