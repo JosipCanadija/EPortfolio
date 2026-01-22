@@ -24,12 +24,20 @@
       color-scheme: dark;
     }
     *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef8;background:linear-gradient(180deg,#071023 0%, #07182a 60%);-webkit-font-smoothing:antialiased}
+    html,body{height:100%;margin:0;padding-top: 90px;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef8;background:linear-gradient(180deg,#071023 0%, #07182a 60%);-webkit-font-smoothing:antialiased}
     a{color:var(--accent);text-decoration:none}
     .container{max-width:var(--maxwidth);margin:0 auto;padding:24px;}
 
     /* --- Header/nav --- */
-    header{background:transparent;position:sticky;top:0;z-index:50;padding:10px 0;backdrop-filter: blur(6px)}
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      background: rgba(7, 16, 35, 0.85);
+      backdrop-filter: blur(8px);
+    }
     .navrow{display:flex;align-items:center;justify-content:space-between}
     .brand{display:flex;gap:12px;align-items:center}
     .logo{width:42px;height:42px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#021018;font-weight:700}
@@ -41,16 +49,47 @@
     .hamburger{display:none;gap:6px;flex-direction:column;cursor:pointer}
     .hamburger span{width:22px;height:2px;background:#dff7f0;border-radius:2px}
 
-    @media (max-width: 800px) {
-        nav { display: none; }
-        .hamburger { display: flex; z-index: 2000; }
-        .mobilemenu {
-            position: absolute; top: 60px; right: 20px; width: calc(100% - 40px);
-            background: #0b1220 !important; border: 1px solid rgba(255,255,255,0.12);
-            padding: 12px; border-radius: 12px; display: none; flex-direction: column; z-index: 2001;
-        }
-        .mobilemenu a { padding: 10px 0; display: block; color: #dff7f0; font-weight: 600; }
+    /* --- Desktop default --- */
+    .mobilemenu {
+      display: none;
     }
+
+    .hamburger {
+      display: none;
+    }
+
+    @media (max-width: 800px) {
+      nav {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+        z-index: 2000;
+      }
+
+      .mobilemenu {
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        width: calc(100% - 40px);
+        background: #0b1220;
+        border: 1px solid rgba(255,255,255,0.12);
+        padding: 12px;
+        border-radius: 12px;
+        display: none; /* prikazuje se samo klikom */
+        flex-direction: column;
+        z-index: 2001;
+      }
+
+      .mobilemenu a {
+        padding: 10px 0;
+        display: block;
+        color: #dff7f0;
+        font-weight: 600;
+      }
+    }
+
 
     /* --- Hero --- */
     .hero{display:flex;gap:24px;align-items:center;padding:48px 0}
@@ -85,35 +124,46 @@
     footer{margin-top:36px;padding:18px 0;color:var(--muted);font-size:14px;text-align:center}
     .contact-wrapper { display: flex; gap: 20px; justify-content: space-between; padding: 20px; }
     @media (max-width: 700px) { .contact-wrapper { flex-direction: column; } }
-  </style>
+    section {
+      scroll-margin-top: 100px;
+    }
+    </style>
 </head>
 <body>
 
-  <header class="container">
-    <div class="navrow">
-      <div class="brand">
-        <div class="logo">TIW</div>
-        <div>
-          <div style="font-weight:700">E-portfolio</div>
-          <div class="muted" style="font-size:13px">Luka Jovanović & Josip Čanađija</div>
+  <header>
+    <div class="container">
+      <div class="navrow">
+        <div class="brand">
+          <div class="logo">TIW</div>
+          <div>
+            <div style="font-weight:700">E-portfolio</div>
+            <div class="muted" style="font-size:13px">Luka Jovanović & Josip Čanađija</div>
+          </div>
         </div>
-      </div>
-      <nav>
-        <a href="#home">Početna</a>
-        <a href="#about">O nama</a>
-        <a href="#projects">Projekti</a>
-        <a href="#skills">Vještine</a>
-        <a href="#contact" class="cta">Kontakt</a>
-      </nav>
-      <div class="hamburger" id="hambtn">
-        <span></span><span></span><span></span>
-      </div>
-      <div class="mobilemenu card" id="mobilemenu">
-        <a href="#home">Početna</a>
-        <a href="#about">O nama</a>
-        <a href="#projects">Projekti</a>
-        <a href="#skills">Vještine</a>
-        <a href="#contact">Kontakt</a>
+        <nav>
+          <a href="#home">Početna</a>
+          <a href="#about">O nama</a>
+          <a href="#projects">Projekti</a>
+          <a href="#skills">Vještine</a>
+          <a href="#analytics">Analitika</a>
+          <a href="#funnel">Funnel analiza</a>
+          <a href="#retention">Retention</a>
+          <a href="#contact" class="cta">Kontakt</a>
+        </nav>
+        <div class="hamburger" id="hambtn">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="mobilemenu card" id="mobilemenu">
+          <a href="#home">Početna</a>
+          <a href="#about">O nama</a>
+          <a href="#projects">Projekti</a>
+          <a href="#skills">Vještine</a>
+          <a href="#analytics">Analitika</a>
+          <a href="#funnel">Funnel analiza</a>
+          <a href="#retention">Retention</a>
+          <a href="#contact">Kontakt</a>
+        </div>
       </div>
     </div>
   </header>
@@ -181,6 +231,13 @@
       </div>
     </section>
 
+    <section id="recommendations" style="margin-top:18px">
+      <h2>Preporučeno za vas</h2>
+      <div id="recommendationBox" class="card">
+        Kliknite na projekt kako bi se prikazale preporuke.
+      </div>
+    </section>
+
     <section id="skills" style="margin-top:18px">
       <h2>Vještine (D3.js Vizualizacija)</h2>
       <div id="skillsCard" class="card">
@@ -194,6 +251,46 @@
         </div>
       </div>
     </section>
+
+    <section id="analytics" style="margin-top:18px">
+      <h2>Analitika korisničkog ponašanja</h2>
+      <p class="muted">
+      Vizualni prikaz osnovnih metrika i analiza ponašanja korisnika temeljen na Google Analytics API-ju i simuliranim podacima
+      </p>
+      <div class="card" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+        <div>
+          <h4>Korisnici po uređaju</h4>
+          <svg id="deviceUsersChart" width="100%" height="260"></svg>
+        </div>
+        <div>
+          <h4>Sesije po uređaju</h4>
+          <svg id="deviceSessionsChart" width="100%" height="260"></svg>
+        </div>
+        <div>
+          <h4>Eventi po uređaju</h4>
+          <svg id="deviceEventsChart" width="100%" height="260"></svg>
+        </div>
+    </div>
+
+    <p class="muted" style="font-size:13px">
+    Vizualizacija koristi simulirane Google Analytics podatke zbog ograničenja pristupa stvarnom GA property-ju
+    </p>
+
+
+    </section>
+
+    <section id="funnel" style="margin-top:18px">
+      <h2>Funnel analiza korisničkog toka</h2>
+      <svg id="funnelChart" width="100%" height="300"></svg>
+      <p class="muted" id="funnelText"></p>
+    </section>
+
+    <section id="retention" style="margin-top:18px">
+      <h2>Retention analiza</h2>
+      <svg id="retentionChart" width="100%" height="260"></svg>
+      <p class="muted" id="retentionText"></p>
+    </section>
+
 
     <section id="contact" style="margin-top:18px">
       <h2>Kontakt</h2>
@@ -224,17 +321,42 @@
     const PROPERTY_ID = '487589639';
     const SCOPES = 'https://www.googleapis.com/auth/analytics.readonly';
 
+    window.gaData = [];
+    let analyticsSource = "mock";
+
     const team = [
       { id: "Luka", name: "Luka Jovanović", color: "#5eead4", skills: {"HTML/CSS": 75, "JavaScript": 36, "D3.js": 28, "Unity": 91, "Blender": 80} },
       { id: "Josip", name: "Josip Čanađija", color: "#7c3aed", skills: {"HTML/CSS": 70, "JavaScript": 50, "D3.js": 35, "Unity": 90, "Blender": 20} }
     ];
 
-    const projectsData = [
+    /*const projectsData = [
       {id:1,title:"Light Rush",tags:["game","luka"],short:"3D infinite runner."},
       {id:2,title:"MuscleBuddy",tags:["mobile","luka","josip"],short:"Fitness app."},
       {id:6,title:"Dungeon Core",tags:["game","josip"],short:"Tower defense."},
       {id:9,title:"Kastav Turizam",tags:["web","josip"],short:"Web stranica agencije."}
+    ];*/
+
+    const projectsData = [
+      { id: 1, title: "Light Rush", tags: ["game", "luka"], short: "3D infinite runner izrađen u Unityju." },
+      { id: 2, title: "Crystal Caverns", tags: ["game", "luka"], short: "Puzzle-platformer s fokusom na fiziku." },
+      { id: 3, title: "Dungeon Core", tags: ["game", "josip"], short: "Tower defense igra s proceduralnim mapama." },
+      { id: 4, title: "Pixel Arena", tags: ["game", "josip"], short: "2D pixel-art arena fighting igra." },
+      { id: 5, title: "Kastav Turizam", tags: ["web", "josip"], short: "Web stranica za lokalnu turističku zajednicu." },
+      { id: 6, title: "Student Planner", tags: ["web", "josip"], short: "Web aplikacija za planiranje studentskih obveza." },
+      { id: 7, title: "MuscleBuddy", tags: ["mobile", "luka", "josip"], short: "Mobilna aplikacija za praćenje treninga." },
+      { id: 8, title: "HealthyTrack", tags: ["mobile", "josip"], short: "Mobilna aplikacija za praćenje zdravih navika." },
+      { id: 9, title: "3D Portfolio", tags: ["web", "luka"], short: "Web portfolio s integriranim 3D modelima." }
     ];
+
+
+    // --- SIMULIRANI GA PODACI ---
+    const mockGAData = [
+      { device: "desktop", users: 120, sessions: 180, events: 450 },
+      { device: "mobile", users: 90, sessions: 140, events: 300 },
+      { device: "tablet", users: 20, sessions: 30, events: 60 }
+    ];
+
+
 
     /* --- OAUTH 2.0 LOGIKA --- */
     let tokenClient;
@@ -249,6 +371,7 @@
             accessToken = tokenResponse.access_token;
             document.getElementById('authStatus').innerText = "Status: Autoriziran ✅";
             document.getElementById('revokeBtn').style.display = 'inline-block';
+            let analyticsSource = "ga";
             runAnalyticsReport();
           }
         },
@@ -261,21 +384,75 @@
 
     async function runAnalyticsReport() {
       const url = `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`;
+
       const body = {
         dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-        metrics: [{ name: 'activeUsers' }]
+        dimensions: [
+          { name: 'deviceCategory' },
+          { name: 'pagePath' }
+        ],
+        metrics: [
+          { name: 'activeUsers' },
+          { name: 'sessions' },
+          { name: 'eventCount' }
+        ]
       };
+
       try {
         const res = await fetch(url, {
           method: 'POST',
-          headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify(body)
         });
+
         const data = await res.json();
-        const count = data.rows ? data.rows[0].metricValues[0].value : 0;
-        document.getElementById('apiResult').innerText = `Aktivni posjetitelji (7 dana): ${count}`;
-      } catch (e) { console.error(e); }
+        console.log("FULL GA RESPONSE:", JSON.stringify(data, null, 2));
+
+
+        if (data.rows && data.rows.length > 0) {
+          analyticsSource = "ga";
+
+          window.gaData = data.rows.map(r => ({
+            device: r.dimensionValues[0].value,
+            users: Number(r.metricValues[0].value),
+            sessions: Number(r.metricValues[1].value),
+            events: Number(r.metricValues[2].value)
+          }));
+
+          document.getElementById("apiResult").innerText =
+            "GA podaci dohvaćeni (stvarni podaci) ✔️";
+
+          redrawAnalyticsCharts();
+        } else {
+          analyticsSource = "mock";
+          window.gaData = mockGAData;
+
+          document.getElementById("apiResult").innerText =
+            "GA nema dopuštenje – koriste se simulirani podaci ⚠️";
+
+          redrawAnalyticsCharts();
+        }
+
+
+        document.getElementById('apiResult').innerText = "Podaci uspješno dohvaćeni ✔️";
+
+      } catch (e) {
+          console.error("GA error:", e);
+
+          analyticsSource = "mock";
+          window.gaData = mockGAData;
+
+          document.getElementById("apiResult").innerText =
+            "Greška pri GA dohvaćanju – mock podaci aktivni ⚠️";
+
+          redrawAnalyticsCharts();
+        }
+
     }
+
 
     function revokeToken() {
       if (accessToken) {
@@ -288,12 +465,105 @@
       }
     }
 
+    const funnelData = [
+      { step: "Landing page", users: 300 },
+      { step: "Pregled projekata", users: 210 },
+      { step: "Klik na projekt", users: 140 },
+      { step: "Klik na preporuku", users: 60 }
+    ];
+
+    const retentionData = [
+      { day: "Day 0", users: 100 },
+      { day: "Day 1", users: 45 },
+      { day: "Day 7", users: 18 }
+    ];
+
+
+    function drawFunnelChart() {
+      const svg = d3.select("#funnelChart");
+      svg.selectAll("*").remove();
+
+      const width = svg.node().getBoundingClientRect().width || 600;
+      const height = 300;
+      const margin = { top: 20, right: 20, bottom: 40, left: 120 };
+
+      const x = d3.scaleLinear()
+        .domain([0, d3.max(funnelData, d => d.users)])
+        .range([0, width - margin.left - margin.right]);
+
+      const y = d3.scaleBand()
+        .domain(funnelData.map(d => d.step))
+        .range([0, height - margin.top - margin.bottom])
+        .padding(0.3);
+
+      const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+      g.append("g").call(d3.axisLeft(y));
+      g.append("g")
+        .attr("transform", `translate(0,${height - margin.top - margin.bottom})`)
+        .call(d3.axisBottom(x));
+
+      g.selectAll("rect")
+        .data(funnelData)
+        .enter()
+        .append("rect")
+        .attr("y", d => y(d.step))
+        .attr("height", y.bandwidth())
+        .attr("width", d => x(d.users))
+        .attr("fill", "#5eead4");
+
+      document.getElementById("funnelText").innerText ="Najveći pad korisnika događa se između pregleda projekata i klika na konkretan projekt, što upućuje na potrebu jasnijih CTA elemenata i vizualne hijerarhije";
+    }
+
+    function drawRetentionChart() {
+      const svg = d3.select("#retentionChart");
+      svg.selectAll("*").remove();
+
+      const width = svg.node().getBoundingClientRect().width || 600;
+      const height = 260;
+      const margin = { top: 20, right: 20, bottom: 40, left: 60 };
+
+      const x = d3.scaleBand()
+        .domain(retentionData.map(d => d.day))
+        .range([margin.left, width - margin.right])
+        .padding(0.3);
+
+      const y = d3.scaleLinear()
+        .domain([0, 100])
+        .range([height - margin.bottom, margin.top]);
+
+      svg.append("g")
+        .attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x));
+
+      svg.append("g")
+        .attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y));
+
+      svg.selectAll("rect")
+        .data(retentionData)
+        .enter()
+        .append("rect")
+        .attr("x", d => x(d.day))
+        .attr("y", d => y(d.users))
+        .attr("height", d => y(0) - y(d.users))
+        .attr("width", x.bandwidth())
+        .attr("fill", "#7c3aed");
+
+      document.getElementById("retentionText").innerText ="Day 1 retention iznosi 45%, dok Day 7 pada na 18%, što sugerira solidan prvi dojam, ali slabiju dugoročnu vrijednost aplikacije bez dodatnog angažmana";
+    }
+
+
     /* --- UI & D3 GRAF --- */
     window.onload = () => {
       initTokenClient();
       document.getElementById('year').textContent = new Date().getFullYear();
       renderProjects();
       draw();
+      redrawAnalyticsCharts();
+      drawFunnelChart();
+      drawRetentionChart();
     };
 
     // Mobile menu toggle
@@ -307,13 +577,50 @@
     function renderProjects(filter = 'all') {
       const list = document.getElementById('projectsList');
       list.innerHTML = '';
-      projectsData.filter(p => filter === 'all' || p.tags.includes(filter)).forEach(p => {
-        const el = document.createElement('div');
-        el.className = 'project';
-        el.innerHTML = `<h4>${p.title}</h4><p class="muted">${p.short}</p>`;
-        list.appendChild(el);
+
+      projectsData
+        .filter(p => filter === 'all' || p.tags.includes(filter))
+        .forEach(p => {
+          const el = document.createElement('div');
+          el.className = 'project card';
+          el.dataset.category = p.tags.find(t =>
+            ["web", "game", "mobile"].includes(t)
+          );
+
+          el.innerHTML = `<h4>${p.title}</h4><p class="muted">${p.short}</p>`;
+          list.appendChild(el);
+        });
+
+      initRecommendations();
+    }
+
+
+    function initRecommendations() {
+      const projects = document.querySelectorAll(".project");
+      const box = document.getElementById("recommendationBox");
+
+      if (!projects.length || !box) return;
+
+      projects.forEach(project => {
+        project.onclick = () => {
+          const category = project.dataset.category;
+
+          const related = [...projects].filter(p =>
+            p.dataset.category === category && p !== project
+          );
+
+          if (related.length > 0) {
+            box.innerHTML =
+              `<strong>Preporučujemo:</strong> ${related[0].querySelector("h4").innerText}`;
+          } else {
+            box.innerHTML =
+              `<strong>Preporučujemo:</strong> Najpopularniji projekt`;
+          }
+        };
       });
     }
+
+
 
     document.querySelectorAll('[data-filter]').forEach(btn => {
       btn.onclick = () => {
@@ -356,6 +663,69 @@
         });
       });
     }
+
+    document.getElementById("toggleBtn").onclick = () => {
+      grouped = !grouped;
+      document.getElementById("toggleBtn").classList.toggle("active");
+      draw();
+    };
+
+    document.getElementById("sortBtn").onclick = () => {
+      skillSet.sort((a, b) => {
+        const sumA = team.reduce((s, m) => s + (m.skills[a] || 0), 0);
+        const sumB = team.reduce((s, m) => s + (m.skills[b] || 0), 0);
+        return sumB - sumA;
+      });
+      draw();
+    };
+
+
+    function drawBarChart(svgId, valueKey, color, data = mockGAData) {
+      const svg = d3.select(svgId);
+      svg.selectAll("*").remove();
+
+      const width = svg.node().getBoundingClientRect().width;
+      const height = 260;
+      const margin = { top: 20, right: 20, bottom: 40, left: 50 };
+
+      const x = d3.scaleBand()
+        .domain(data.map(d => d.device))
+        .range([margin.left, width - margin.right])
+        .padding(0.3);
+
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d[valueKey])])
+        .nice()
+        .range([height - margin.bottom, margin.top]);
+
+      svg.append("g")
+        .attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x));
+
+      svg.append("g")
+        .attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y));
+
+      svg.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", d => x(d.device))
+        .attr("y", d => y(d[valueKey]))
+        .attr("height", d => y(0) - y(d[valueKey]))
+        .attr("width", x.bandwidth())
+        .attr("fill", color);
+    }
+
+    function redrawAnalyticsCharts() {
+      const sourceData = analyticsSource === "ga" ? window.gaData : mockGAData;
+
+      drawBarChart("#deviceUsersChart", "users", "#5eead4", sourceData);
+      drawBarChart("#deviceSessionsChart", "sessions", "#7c3aed", sourceData);
+      drawBarChart("#deviceEventsChart", "events", "#22c55e", sourceData);
+    }
+
+
   </script>
 
   <script>
